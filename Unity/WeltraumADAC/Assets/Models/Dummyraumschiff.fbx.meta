@@ -6,10 +6,19 @@ ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
+    100002: DamagePoints
+    100004: Dummy-Spaceship
     400000: //RootNode
+    400002: DamagePoints
+    400004: Dummy-Spaceship
     2300000: //RootNode
+    2300002: DamagePoints
+    2300004: Dummy-Spaceship
     3300000: //RootNode
+    3300002: DamagePoints
+    3300004: Dummy-Spaceship
     4300000: Dummy-Spaceship
+    4300002: DamagePoints
   materials:
     importMaterials: 1
     materialName: 0
