@@ -99,10 +99,9 @@ public class Movement : MonoBehaviour {
 
         // find shortest path to new target
         path = findShortestWayToTarget(target);
-        foreach(Waypoint wp in path)
-        {
-            Debug.Log(wp.transform.position);
-        }
+
+        Debug.Log("next waypoint = " + path.First.Value);
+        nextCheckpoint = null;
     }
 
     private LinkedList<Waypoint> findShortestWayToTarget(Waypoint target)
@@ -136,19 +135,11 @@ public class Movement : MonoBehaviour {
             temporaryGameObject = new GameObject();
             startingPoint = temporaryGameObject.AddComponent<Waypoint>();
 
-            if (null == startingPoint) Debug.LogError("statingPoint == null");
-            if (startingPoint.transform == null) Debug.LogError("statingPoint.transform == null");
-
             startingPoint.transform.position = transform.position;
             startingPoint.connections = new Waypoint[2];
-            if(lastCheckpoint != null)
-            {
-                startingPoint.connections[0] = lastCheckpoint;
-            }
-            if(nextCheckpoint != null)
-            {
-                startingPoint.connections[1] = nextCheckpoint;
-            }
+            startingPoint.connections[0] = lastCheckpoint;
+            startingPoint.connections[1] = nextCheckpoint;
+            Debug.Log("lastCheckpoint = " + lastCheckpoint + ", nextCheckPoint = " + nextCheckpoint);
         }
 
         // add starting point as root of exploredNodes

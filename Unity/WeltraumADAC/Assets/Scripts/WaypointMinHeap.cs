@@ -38,9 +38,13 @@ namespace Assets.Scripts
             } else
             // otherwise find corresponding node and update it
             {
+                float pathLength = predecessorNode.pathLength + (waypoint.transform.position -predecessorNode.waypoint.transform.position).magnitude;
                 WaypointMinHeapNode node = waypointToNodeMap[waypoint];
-                node.setPredecessor(predecessorNode);
-                bubbleUp(node);
+                if (pathLength < node.pathLength)
+                {
+                    node.setPredecessor(predecessorNode);
+                    bubbleUp(node);
+                }
                 return node;
             }
         }
