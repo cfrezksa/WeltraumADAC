@@ -16,7 +16,7 @@ public class GamePlay : MonoBehaviour {
            listDamages.Add(d);
        }
 
-       for (int i = 0; i < 2; i++)
+       for (int i = 0; i < 4; i++)
        {
            int index = Random.Range(0, listDamages.Count);
            DamagePoint dmg = listDamages[index];
