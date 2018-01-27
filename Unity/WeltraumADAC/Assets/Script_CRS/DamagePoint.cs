@@ -52,6 +52,10 @@ public class DamagePoint : MonoBehaviour {
             return;
         }
 
+        if (damageOn != null)
+        {
+            damageOn.gameObject.SetActive(true);
+        }
         //Debug.Log("DamagePoint " + name + " is activated!");
 
         DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
@@ -71,6 +75,10 @@ public class DamagePoint : MonoBehaviour {
 
     public void Deactivate()
     {
+        if (damageOn != null)
+        {
+            damageOn.gameObject.SetActive(false);
+        }
         //Debug.Log("Deactivate DamagePoint: " + name);
         activeDamages.Remove(this);
 
