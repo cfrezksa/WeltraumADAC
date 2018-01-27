@@ -67,7 +67,7 @@ public class RobotControl : MonoBehaviour {
     }
    public void HighlightRobot()
     {
-        Colorize(Color.red);
+        Colorize(Color.green);
     }
 
     public void UnhighlightRobot()

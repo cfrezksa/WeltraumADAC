@@ -18,8 +18,8 @@ public class Waypoint : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //Renderer r = GetComponent<Renderer>();
-        //if (null != r) r.enabled = false;
+        Renderer r = GetComponent<Renderer>();
+        if (null != r) r.enabled = false;
 	}
 	
 	// Update is called once per frame
