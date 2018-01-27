@@ -6,7 +6,7 @@ using Assets.Scripts;
 
 public class Movement : MonoBehaviour {
 
-    Waypoint[] waypoints;
+    //Waypoint[] waypoints;
     public float velocity = 4f;
     Waypoint targetWaypoint;
     public Waypoint spawnPoint;
@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour {
 	void Start () {
 
         // fetch list of all waypoints
-        waypoints = FindObjectsOfType<Waypoint>();
+        //waypoints = FindObjectsOfType<Waypoint>();
 
         // set current position to given spawn point
         if(spawnPoint != null)
@@ -66,7 +66,6 @@ public class Movement : MonoBehaviour {
             transform.position += stepLength * direction;
 
             Vector3 fwd = this.transform.forward;
-            Vector3 newFwd = direction;
             Vector3 lookDir = (fwd + turnSpeed * Time.deltaTime * direction).normalized;
             this.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
         }

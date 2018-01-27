@@ -65,7 +65,24 @@ public class RobotControl : MonoBehaviour {
             ActionFinished();
         }
     }
+   public void HighlightRobot()
+    {
+        Colorize(Color.red);
+    }
 
+    public void UnhighlightRobot()
+    {
+        Colorize(Color.white);
+    }
+
+    private void Colorize(Color col)
+    {
+        var renderers = this.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            r.material.color = col;
+        }
+    }
 
     private void MoveToTarget()
     {
@@ -182,7 +199,7 @@ public class RobotControl : MonoBehaviour {
 
     void BeConfused()
     {
-
+        Colorize(Color.red);
         Debug.Log("Robot " + name + " is now confused!");
 
         if (carriedItem != null)

@@ -47,10 +47,10 @@ public class DamagePoint : MonoBehaviour {
     {
         
         if (activeDamages.Contains(this)) {
-            Debug.LogError("DamagePoint " + name + " should not be active!");
+            return;
         }
 
-        Debug.Log("DamagePoint " + name + " is activated!");
+        //Debug.Log("DamagePoint " + name + " is activated!");
 
         DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
         SetDamage(dmg);
