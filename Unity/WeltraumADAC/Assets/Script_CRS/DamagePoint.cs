@@ -19,16 +19,15 @@ public class DamagePoint : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        SetDamage(DamageType.REPAIR_WELD);
+        //SetDamage(DamageType.REPAIR_NONE);
 	}
 
     private void SetDamage(DamageType dmg)
     {
+        //Debug.Log("DamagePoint " + name + " = " + dmg);
         Waypoint wp = GetComponent<Waypoint>();
-        if (null == wp)
-        {
-            Debug.LogError("missing <Waypoint> on objec " + name);
-        }
+        if (null == wp) Debug.LogError("missing <Waypoint> on objec " + name);
+        
         wp.goalType = Waypoint.GoalType.DAMAGE;
         wp.damage = dmg;
     }
@@ -38,8 +37,21 @@ public class DamagePoint : MonoBehaviour {
 		
 	}
 
+    public bool IsActive()
+    {
+        Waypoint wp = GetComponent<Waypoint>();
+        if (null == wp) Debug.LogError("missing <Waypoint> on objec " + name);        
+        return (wp.damage != DamageType.REPAIR_NONE);
+    }
     public void Activate()
     {
+        
+        if (activeDamages.Contains(this)) {
+            Debug.LogError("DamagePoint " + name + " should not be active!");
+        }
+
+        Debug.Log("DamagePoint " + name + " is activated!");
+
         DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
         SetDamage(dmg);
 
@@ -63,5 +75,9 @@ public class DamagePoint : MonoBehaviour {
         Selectable selectable = GetComponent<Selectable>();
         selectable.symbol = Symbol.None;
         selectable.group = SelectGroup.DAMAGE_4;
+
+        Waypoint wp = GetComponent<Waypoint>();
+        if (null == wp) Debug.LogError("missing <Waypoint> on objec " + name);
+        wp.damage = DamageType.REPAIR_NONE;
     }
 }

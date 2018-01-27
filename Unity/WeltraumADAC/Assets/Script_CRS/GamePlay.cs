@@ -8,16 +8,11 @@ public class GamePlay : MonoBehaviour {
 	void Start () {
 
        DamagePoint[] damages = FindObjectsOfType<DamagePoint>();
-       //for (int i = 0; i < 4; i++)
-       //{
-       //    DamagePoint dmg = damages[Random.Range(0, damages.Length)];
-       //    dmg.Activate();
-       //}
-
-        foreach (var d in damages)
-        {
-            d.Activate();
-        }
+       for (int i = 0; i < 2; i++)
+       {
+           DamagePoint dmg = damages[Random.Range(0, damages.Length)];
+           dmg.Activate();
+       }
 	}
 	
 	// Update is called once per frame

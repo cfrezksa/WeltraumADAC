@@ -13,6 +13,7 @@ public class Movement : MonoBehaviour {
     Waypoint lastCheckpoint;
     Waypoint nextCheckpoint;
     public LinkedList<Waypoint> path;
+    public float turnSpeed = 3.0f;
 
     GameObject temporaryGameObject = null;
 	// Use this for initialization
@@ -63,6 +64,11 @@ public class Movement : MonoBehaviour {
             //Debug.Log("Move");
             var direction = pathToGo.normalized;
             transform.position += stepLength * direction;
+
+            Vector3 fwd = this.transform.forward;
+            Vector3 newFwd = direction;
+            Vector3 lookDir = (fwd + turnSpeed * Time.deltaTime * direction).normalized;
+            this.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
         }
     }
 
@@ -100,7 +106,7 @@ public class Movement : MonoBehaviour {
         // find shortest path to new target
         path = findShortestWayToTarget(target);
 
-        Debug.Log("next waypoint = " + path.First.Value);
+        //Debug.Log("next waypoint = " + path.First.Value);
         nextCheckpoint = null;
     }
 
