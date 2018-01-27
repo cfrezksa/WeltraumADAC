@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour {
 
+    public float range = 5.0f;
     public float velocity = 0.1f;
 	// Use this for initialization
 	void Start () {
@@ -29,7 +30,13 @@ public class PlayerMove : MonoBehaviour {
 
         RobotControl[] robots = FindObjectsOfType<RobotControl>();
         foreach (var rob in robots) {
-            Debug.DrawLine(this.transform.position, rob.transform.position, Color.blue);
+            Vector3 robotPos = rob.transform.position;
+            Vector3 playerPos = this.transform.position;
+            float dist = (robotPos - playerPos).magnitude;
+            if (dist < range)
+            {
+                Debug.DrawLine(playerPos, robotPos, Color.blue);
+            }
         }
 		
 	}

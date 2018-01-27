@@ -5,8 +5,11 @@ using UnityEngine;
 public enum SelectGroup
 {
     ROBOT,
-    DAMAGE,
     CONTAINER,
+    DAMAGE_1,
+    DAMAGE_2,
+    DAMAGE_3,
+    DAMAGE_4,
 }
 
 public enum Symbol
@@ -26,8 +29,12 @@ public class Selectable : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
-        icon.gameObject.SetActive(group == activeGroup);
-        icon.GetComponent<Renderer>().material = buttonMaterials[(int)symbol];
+        bool symbolVisible = (group == activeGroup) && (symbol != Symbol.None);
+        icon.gameObject.SetActive(symbolVisible);
+        if (symbolVisible)
+        {
+            icon.GetComponent<Renderer>().material = buttonMaterials[(int)symbol];
+        }
 	}
 
     public static SelectGroup activeGroup = SelectGroup.ROBOT;

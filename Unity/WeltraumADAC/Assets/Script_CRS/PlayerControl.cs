@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour {
 
-    
+
+    static int damageIndex = 0;
 	// Use this for initialization
 	void Start () {
         Selectable.activeGroup = SelectGroup.ROBOT;
@@ -20,50 +21,87 @@ public class PlayerControl : MonoBehaviour {
         if (button != Symbol.None)
         {
             Selectable sel = GetSelected(button);
-
-            switch (Selectable.activeGroup)
+            if (null != sel)
             {
-                case SelectGroup.ROBOT:
-                    SelectRobot(sel);
-                    break;
-                case SelectGroup.CONTAINER:
-                    SelectContainer(sel);
-                    break;
-                case SelectGroup.DAMAGE:
-                    SelectDamage(sel);
-                    break;
+                switch (Selectable.activeGroup)
+                {
+                    case SelectGroup.ROBOT:
+                        SelectRobot(sel);
+                        break;
+                    case SelectGroup.CONTAINER:
+                        SelectContainer(sel);
+                        break;
+                    case SelectGroup.DAMAGE_1:
+                    case SelectGroup.DAMAGE_2:
+                    case SelectGroup.DAMAGE_3:
+                    case SelectGroup.DAMAGE_4:
+                        SelectDamage(sel);
+                        break;
+                }
             }
         }
 	}
 
-    RobotControl robot = null;
-    void SelectRobot(Selectable s)
+    static RobotControl selectedRobot = null;
+    static void SelectRobot(Selectable s)
     {
-        Debug.Log("Robot '" + s.name + "' was selected!");
-        if (robot != null)
+        if (null == s)
         {
-            robot.GetComponent<Renderer>().material.color = Color.white;
+            Debug.LogError("invalid robot selection");
+            return;
         }
-        s.GetComponent<Renderer>().material.color = Color.blue;
-        robot = s.GetComponent<RobotControl>();
+
+        Debug.Log("Robot '" + s.name + "' was selected!");
+
+        if (selectedRobot != null) UnhighlightRobot(selectedRobot);
+
+        selectedRobot = s.GetComponent<RobotControl>();
+        if (selectedRobot != null) HighlightRobot(selectedRobot);
         
     }
 
-    void SelectContainer(Selectable s)
+    static void HighlightRobot(RobotControl robot)
     {
-        Debug.Log("Container '" + s.name + "' was selected!");
-        if (null != robot)
+        var renderers = robot.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
         {
-            robot.setTarget(s.transform.position);
+            r.material.color = Color.green;
         }
     }
 
-    void SelectDamage(Selectable s)
+    static void UnhighlightRobot(RobotControl robot)
     {
-        Debug.Log("Damage '" + s.name + "' was selected!");
-        if (null != robot)
+        var renderers = robot.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
         {
-            robot.setTarget(s.transform.position);
+            r.material.color = Color.white;
+        }
+    }
+
+    static void SelectContainer(Selectable s)
+    {
+        //Debug.Log("Container '" + s.name + "' was selected!");
+        if (null != selectedRobot)
+        {
+            Waypoint wp = s.GetComponent<Waypoint>();
+            if (null == wp) Debug.LogError("Missing <Waypoint> on " + s.name);
+            selectedRobot.SetTarget(wp);
+            UnhighlightRobot(selectedRobot);
+            selectedRobot = null;
+        }
+    }
+
+    static void SelectDamage(Selectable s)
+    {
+        //Debug.Log("Damage '" + s.name + "' was selected!");
+        if (null != selectedRobot)
+        {
+            Waypoint wp = s.GetComponent<Waypoint>();
+            if (null == wp) Debug.LogError("Missing <Waypoint> on " + s.name);
+            selectedRobot.SetTarget(wp);
+
+            UnhighlightRobot(selectedRobot);
+            selectedRobot = null;
         }
     }
 
@@ -108,13 +146,24 @@ public class PlayerControl : MonoBehaviour {
 
     private static void UpdateActiveGroup()
     {
-        if (Input.GetButton("Sel Damage"))
+        if (selectedRobot != null)
         {
-            Selectable.activeGroup = SelectGroup.DAMAGE;
-        }
-        else if (Input.GetButton("Sel Container"))
-        {
-            Selectable.activeGroup = SelectGroup.CONTAINER;
+            if (Input.GetButton("Sel Damage"))
+            {
+                if (Input.GetButtonDown("Sel Damage"))
+                {
+                    //if (Input.GetButtonDown("bla"))
+                    Selectable.activeGroup = SelectGroup.DAMAGE_1 + damageIndex;
+                }
+            }
+            else if (Input.GetButton("Sel Container"))
+            {
+                Selectable.activeGroup = SelectGroup.CONTAINER;
+            }
+            else
+            {
+                Selectable.activeGroup = SelectGroup.ROBOT;
+            }
         }
         else
         {

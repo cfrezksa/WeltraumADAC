@@ -41,4 +41,20 @@ public class Movement : MonoBehaviour {
                 transform.position += distance * direction;
             }
 	}
+
+    // command the robot to move to the target waypoint
+    public void setTargetWaypoint(Waypoint p)
+    {
+        if (waypoint != null)
+        {
+            waypoint.GetComponent<Renderer>().material.color = Color.white;
+        }
+        waypoint = p;
+        if (waypoint != null)
+        {
+            waypoint.GetComponent<Renderer>().material.color = Color.red;
+            finish = waypoint.transform.position;
+        }
+
+    }
 }
