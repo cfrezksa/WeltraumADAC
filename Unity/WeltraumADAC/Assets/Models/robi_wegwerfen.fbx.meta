@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: 2d93d4d0b3bf2cc47b306536acbec822
+timeCreated: 1517092753
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Head
+    100002: HeadEnd
+    100004: HeadRoot
+    100006: Hips
+    100008: kopf
+    100010: LtArm
+    100012: LtArmElbow
+    100014: LtArmEnd
+    100016: LtArmIK
+    100018: LtArmRoot
+    100020: LtArmTurn
+    100022: LTElbow
+    100024: polySurface38
+    100026: polySurface39
+    100028: polySurface40
+    100030: polySurface46
+    100032: polySurface47
+    100034: polySurface48
+    100036: polySurface49
+    100038: pSphere20
+    100040: pSphere21
+    100042: //RootNode
+    100044: roboter
+    100046: Root
+    100048: RtArm
+    100050: RtArmElbow
+    100052: RtArmEnd
+    100054: RtArmIK
+    100056: RtArmRoot
+    100058: RtArmTurn
+    100060: RtElbow
+    100062: SpineEnd
+    100064: transform1
+    100066: transform2
+    100068: transform3
+    400000: Head
+    400002: HeadEnd
+    400004: HeadRoot
+    400006: Hips
+    400008: kopf
+    400010: LtArm
+    400012: LtArmElbow
+    400014: LtArmEnd
+    400016: LtArmIK
+    400018: LtArmRoot
+    400020: LtArmTurn
+    400022: LTElbow
+    400024: polySurface38
+    400026: polySurface39
+    400028: polySurface40
+    400030: polySurface46
+    400032: polySurface47
+    400034: polySurface48
+    400036: polySurface49
+    400038: pSphere20
+    400040: pSphere21
+    400042: //RootNode
+    400044: roboter
+    400046: Root
+    400048: RtArm
+    400050: RtArmElbow
+    400052: RtArmEnd
+    400054: RtArmIK
+    400056: RtArmRoot
+    400058: RtArmTurn
+    400060: RtElbow
+    400062: SpineEnd
+    400064: transform1
+    400066: transform2
+    400068: transform3
+    2100000: lambert1
+    4300000: polySurface38
+    4300002: polySurface46
+    4300004: polySurface39
+    4300006: polySurface47
+    4300008: kopf
+    4300010: polySurface49
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: kopf
+    13700002: polySurface38
+    13700004: polySurface39
+    13700006: polySurface46
+    13700008: polySurface47
+    13700010: polySurface49
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 50
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

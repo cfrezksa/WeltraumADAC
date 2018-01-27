@@ -109,7 +109,7 @@ public class RobotControl : MonoBehaviour {
     void ActionFinished()
     {
 
-        Debug.Log("ExecuteAction()");
+        //Debug.Log("ExecuteAction()");
         switch (state)
         {
             case RobotState.MAKING_DAMAGE:
@@ -124,7 +124,7 @@ public class RobotControl : MonoBehaviour {
 
     private void FinishRegularAction()
     {
-        Debug.Log("Regular Action");
+        //Debug.Log("Regular Action");
         switch (goal.goalType)
         {
             case Waypoint.GoalType.CONTAINER:
@@ -140,7 +140,7 @@ public class RobotControl : MonoBehaviour {
 
     private void FinishDamageAction()
     {
-        Debug.Log("Robot " + name + " executing damage action!");
+        //Debug.Log("Robot " + name + " executing damage action!");
         DamagePoint dp = goal.GetComponent<DamagePoint>();
         if (null == dp) Debug.LogError("not a ContainerPoint object!");
 
@@ -152,11 +152,11 @@ public class RobotControl : MonoBehaviour {
 
     private void FinishRepairAction() {
     
-        Debug.Log("Robot " + name + " executing repair action!");
+        //Debug.Log("Robot " + name + " executing repair action!");
         DamagePoint dp = goal.GetComponent<DamagePoint>();
         if (null == dp) Debug.LogError("not a ContainerPoint object!");
 
-        Debug.Log("Goal Damage = " + goal.damage);
+        //Debug.Log("Goal Damage = " + goal.damage);
         switch (goal.damage)
         {
             case DamageType.REPAIR_NONE:
@@ -169,8 +169,7 @@ public class RobotControl : MonoBehaviour {
                 }
                 else
                 {
-                    dp.Deactivate();
-                    goal = null;
+                    RepairDone(dp);
                 }
                 break;
             case DamageType.REPAIR_MECHANIC:
@@ -185,8 +184,7 @@ public class RobotControl : MonoBehaviour {
                 {
                     if (carriedItem.damageType == goal.damage)
                     {
-                        dp.Deactivate();
-                        goal = null;
+                        RepairDone(dp);
                     }
                     else
                     {
@@ -197,10 +195,23 @@ public class RobotControl : MonoBehaviour {
         }
     }
 
+    private void RepairDone(DamagePoint dp)
+    {
+        if (carriedItem != null)
+        {
+            DestroyImmediate(carriedItem.gameObject);
+            carriedItem = null;
+        }
+
+        dp.Deactivate();
+        state = RobotState.MOVE_TO_GOAL;
+        goal = null;
+    }
+
     void BeConfused()
     {
         Colorize(Color.red);
-        Debug.Log("Robot " + name + " is now confused!");
+        //Debug.Log("Robot " + name + " is now confused!");
 
         if (carriedItem != null)
         {
@@ -258,8 +269,18 @@ public class RobotControl : MonoBehaviour {
 
         if (cp.prefab == null) return;
 
+        if (carriedItem != null)
+        {
+            DestroyImmediate(carriedItem.gameObject);
+            carriedItem = null;
+        }
+
+
         GameObject item = Instantiate(cp.prefab, this.transform);
         carriedItem = item.GetComponent<RepairItem>();
+        
+        state = RobotState.MOVE_TO_GOAL;
+        goal = null;
     }
 }
 

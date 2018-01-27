@@ -66,6 +66,7 @@ public class Movement : MonoBehaviour {
             transform.position += stepLength * direction;
 
             direction.y = 0.0f;
+            direction.Normalize();
             Vector3 fwd = this.transform.forward;
             Vector3 lookDir = (fwd + turnSpeed * Time.deltaTime * direction).normalized;
             this.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
@@ -145,7 +146,7 @@ public class Movement : MonoBehaviour {
             startingPoint.connections = new Waypoint[2];
             startingPoint.connections[0] = lastCheckpoint;
             startingPoint.connections[1] = nextCheckpoint;
-            Debug.Log("lastCheckpoint = " + lastCheckpoint + ", nextCheckPoint = " + nextCheckpoint);
+            //Debug.Log("lastCheckpoint = " + lastCheckpoint + ", nextCheckPoint = " + nextCheckpoint);
         }
 
         // add starting point as root of exploredNodes
