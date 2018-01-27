@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour {
 
+    public enum GoalType
+    {
+        NONE,
+        DAMAGE,
+        CONTAINER,
+    }
+
+    public GoalType goalType = GoalType.NONE;
+    public DamageType damage = DamageType.REPAIR_NONE;
     public Waypoint[] connections;
 
 
 	// Use this for initialization
 	void Start () {
-		
+        Renderer r = GetComponent<Renderer>();
+        if (null != r) r.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -24,4 +34,9 @@ public class Waypoint : MonoBehaviour {
         }
 		
 	}
+
+    public void Reached(GameObject robot)
+    {
+
+    }
 }

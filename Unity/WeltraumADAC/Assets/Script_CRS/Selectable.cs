@@ -29,7 +29,17 @@ public class Selectable : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
-        bool symbolVisible = (group == activeGroup) && (symbol != Symbol.None);
+
+        bool symbolVisible = false;
+        if (activeGroup == SelectGroup.ROBOT)
+        {
+            PlayerMove player = FindObjectOfType<PlayerMove>();
+            if (player.IsRobotVisible(this.transform.position)) {
+                 symbolVisible = (group == activeGroup) && (symbol != Symbol.None);
+            }
+        } else {       
+            symbolVisible = (group == activeGroup) && (symbol != Symbol.None);
+        }
         icon.gameObject.SetActive(symbolVisible);
         if (symbolVisible)
         {

@@ -8,16 +8,23 @@ public class PlayerMove : MonoBehaviour {
     public float velocity = 0.1f;
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+        Vector3 newPos = MoveByInput();
+
+        this.transform.position = newPos;
+
+        UpdateRobots();
+		
+	}
+
+    private Vector3 MoveByInput()
+    {
         var moveX = Input.GetAxis("Horizontal");
         var moveY = Input.GetAxis("Vertical");
-
-        Debug.Log("moveX =" + moveX + " moveY = " + moveY);
 
         Vector3 move = new Vector3(-moveY, 0.0f, moveX);
 
@@ -26,18 +33,32 @@ public class PlayerMove : MonoBehaviour {
         if (newPos.x > 10.0) newPos.x = 10.0f;
         if (newPos.z < -10.0) newPos.z = -10.0f;
         if (newPos.z > 10.0) newPos.z = 10.0f;
-        this.transform.position = newPos;
+        return newPos;
+    }
 
+    void OnCollisionEnter(Collision other)
+    {
+        //this.transform.position = prevPos;
+        //Debug.Log("Collision!");
+    }
+
+    private void UpdateRobots()
+    {
         RobotControl[] robots = FindObjectsOfType<RobotControl>();
-        foreach (var rob in robots) {
+        foreach (var rob in robots)
+        {
             Vector3 robotPos = rob.transform.position;
-            Vector3 playerPos = this.transform.position;
-            float dist = (robotPos - playerPos).magnitude;
-            if (dist < range)
-            {
-                Debug.DrawLine(playerPos, robotPos, Color.blue);
+           
+            if (IsRobotVisible(robotPos)){          
+                Debug.DrawLine(this.transform.position, robotPos, Color.blue);
             }
         }
-		
-	}
+    }
+
+    public bool IsRobotVisible(Vector3 robotPos)
+    {
+        Vector3 playerPos = this.transform.position;
+        float dist = (robotPos - playerPos).magnitude;
+        return (dist < range);
+    }
 }

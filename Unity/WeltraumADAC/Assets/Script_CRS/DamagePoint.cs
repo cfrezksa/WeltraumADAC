@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum DamageType
 {
-    REPAIR_NONE,
+    REPAIR_NONE = 0,
     REPAIR_WELD,
     REPAIR_MECHANIC,
     REPAIR_BATTERY,
@@ -16,10 +16,22 @@ public class DamagePoint : MonoBehaviour {
 
     static List<DamagePoint> activeDamages = new List<DamagePoint>();
 
-    Selectable selectable = null;
 	// Use this for initialization
 	void Start () {
+
+        SetDamage(DamageType.REPAIR_WELD);
 	}
+
+    private void SetDamage(DamageType dmg)
+    {
+        Waypoint wp = GetComponent<Waypoint>();
+        if (null == wp)
+        {
+            Debug.LogError("missing <Waypoint> on objec " + name);
+        }
+        wp.goalType = Waypoint.GoalType.DAMAGE;
+        wp.damage = dmg;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -28,6 +40,9 @@ public class DamagePoint : MonoBehaviour {
 
     public void Activate()
     {
+        DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
+        SetDamage(dmg);
+
         //Debug.Log("Activate DamagePoint: " + name);
         int numActive = activeDamages.Count;
         int sym = numActive % 4;

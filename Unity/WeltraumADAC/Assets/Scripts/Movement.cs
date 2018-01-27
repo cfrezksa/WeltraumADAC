@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour {
     Waypoint nextCheckpoint;
     public LinkedList<Waypoint> path;
 
+    GameObject temporaryGameObject = null;
 	// Use this for initialization
 	void Start () {
 
@@ -127,7 +128,17 @@ public class Movement : MonoBehaviour {
         } else
         // we are between two waypoints, thus create a new one
         {
-            startingPoint = new Waypoint();
+            if (null != temporaryGameObject)
+            {
+                Destroy(temporaryGameObject);
+            }
+
+            temporaryGameObject = new GameObject();
+            startingPoint = temporaryGameObject.AddComponent<Waypoint>();
+
+            if (null == startingPoint) Debug.LogError("statingPoint == null");
+            if (startingPoint.transform == null) Debug.LogError("statingPoint.transform == null");
+
             startingPoint.transform.position = transform.position;
             startingPoint.connections = new Waypoint[2];
             if(lastCheckpoint != null)
