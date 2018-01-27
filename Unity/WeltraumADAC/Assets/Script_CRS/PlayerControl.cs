@@ -51,33 +51,16 @@ public class PlayerControl : MonoBehaviour {
             return;
         }
 
-        Debug.Log("Robot '" + s.name + "' was selected!");
+        //Debug.Log("Robot '" + s.name + "' was selected!");
 
-        if (selectedRobot != null) UnhighlightRobot(selectedRobot);
+        if (selectedRobot != null) selectedRobot.UnhighlightRobot();
 
         selectedRobot = s.GetComponent<RobotControl>();
-        if (selectedRobot != null) HighlightRobot(selectedRobot);
+        if (selectedRobot != null) selectedRobot.HighlightRobot();
         
     }
 
-    static void HighlightRobot(RobotControl robot)
-    {
-        var renderers = robot.GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers)
-        {
-            r.material.color = Color.green;
-        }
-    }
-
-    static void UnhighlightRobot(RobotControl robot)
-    {
-        var renderers = robot.GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers)
-        {
-            r.material.color = Color.white;
-        }
-    }
-
+    
     static void SelectContainer(Selectable s)
     {
         //Debug.Log("Container '" + s.name + "' was selected!");
@@ -86,7 +69,7 @@ public class PlayerControl : MonoBehaviour {
             Waypoint wp = s.GetComponent<Waypoint>();
             if (null == wp) Debug.LogError("Missing <Waypoint> on " + s.name);
             selectedRobot.SetTarget(wp);
-            UnhighlightRobot(selectedRobot);
+            selectedRobot.UnhighlightRobot();
             selectedRobot = null;
         }
     }
@@ -100,7 +83,7 @@ public class PlayerControl : MonoBehaviour {
             if (null == wp) Debug.LogError("Missing <Waypoint> on " + s.name);
             selectedRobot.SetTarget(wp);
 
-            UnhighlightRobot(selectedRobot);
+            selectedRobot.UnhighlightRobot();
             selectedRobot = null;
         }
     }
