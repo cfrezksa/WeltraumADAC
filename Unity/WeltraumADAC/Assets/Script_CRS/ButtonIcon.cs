@@ -10,14 +10,14 @@ public class ButtonIcon : MonoBehaviour {
     Vector3 basePosition;
     void Start()
     {
-        basePosition = this.transform.position;
+        basePosition = this.transform.localPosition;
     }
 	void Update () {
 
         localTime += Time.deltaTime;
-        basePosition.x = this.transform.position.x;
-        basePosition.z = this.transform.position.z;
-        this.transform.position = basePosition + bounceAmount * Mathf.Abs(Mathf.Sin(bounceFreq * localTime)) * Vector3.up;
+        basePosition.x = this.transform.localPosition.x;
+        basePosition.z = this.transform.localPosition.z;
+        this.transform.localPosition = basePosition + bounceAmount * Mathf.Abs(Mathf.Sin(bounceFreq * localTime)) * Vector3.up;
         if (Camera.current != null)
         {
             transform.LookAt(transform.position + Camera.current.transform.rotation * Vector3.forward,
