@@ -199,7 +199,7 @@ public class RobotControl : MonoBehaviour {
     {
         if (carriedItem != null)
         {
-            DestroyImmediate(carriedItem);
+            DestroyImmediate(carriedItem.gameObject);
             carriedItem = null;
         }
 
@@ -268,6 +268,13 @@ public class RobotControl : MonoBehaviour {
         if (null == cp) Debug.LogError("not a ContainerPoint object!");
 
         if (cp.prefab == null) return;
+
+        if (carriedItem != null)
+        {
+            DestroyImmediate(carriedItem.gameObject);
+            carriedItem = null;
+        }
+
 
         GameObject item = Instantiate(cp.prefab, this.transform);
         carriedItem = item.GetComponent<RepairItem>();
