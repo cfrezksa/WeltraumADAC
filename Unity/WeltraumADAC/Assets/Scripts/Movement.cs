@@ -119,9 +119,9 @@ public class Movement : MonoBehaviour {
         Waypoint startingPoint = null;
 
         // if we are standing on a waypoint, set this as out starting point
-        if (transform.position == lastCheckpoint.transform.position) {
+        if (lastCheckpoint != null && transform.position == lastCheckpoint.transform.position) {
             startingPoint = lastCheckpoint;
-        } else if(transform.position == nextCheckpoint.transform.position)
+        } else if(nextCheckpoint != null && transform.position == nextCheckpoint.transform.position)
         {
             startingPoint = nextCheckpoint;
         } else
@@ -130,8 +130,14 @@ public class Movement : MonoBehaviour {
             startingPoint = new Waypoint();
             startingPoint.transform.position = transform.position;
             startingPoint.connections = new Waypoint[2];
-            startingPoint.connections[0] = lastCheckpoint;
-            startingPoint.connections[1] = nextCheckpoint;
+            if(lastCheckpoint != null)
+            {
+                startingPoint.connections[0] = lastCheckpoint;
+            }
+            if(nextCheckpoint != null)
+            {
+                startingPoint.connections[1] = nextCheckpoint;
+            }
         }
 
         // add starting point as root of exploredNodes
