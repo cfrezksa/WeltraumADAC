@@ -145,7 +145,7 @@ public class Movement : MonoBehaviour {
             startingPoint.connections = new Waypoint[2];
             startingPoint.connections[0] = lastCheckpoint;
             startingPoint.connections[1] = nextCheckpoint;
-            Debug.Log("lastCheckpoint = " + lastCheckpoint + ", nextCheckPoint = " + nextCheckpoint);
+            //Debug.Log("lastCheckpoint = " + lastCheckpoint + ", nextCheckPoint = " + nextCheckpoint);
         }
 
         // add starting point as root of exploredNodes
