@@ -8,10 +8,20 @@ public class GamePlay : MonoBehaviour {
 	void Start () {
 
        DamagePoint[] damages = FindObjectsOfType<DamagePoint>();
+       List<DamagePoint> listDamages = new List<DamagePoint>();
+
+       foreach (var d in damages)
+       {
+           d.Deactivate();
+           listDamages.Add(d);
+       }
+
        for (int i = 0; i < 2; i++)
        {
-           DamagePoint dmg = damages[Random.Range(0, damages.Length)];
+           int index = Random.Range(0, listDamages.Count);
+           DamagePoint dmg = listDamages[index];
            dmg.Activate();
+           listDamages.Remove(dmg);
        }
 	}
 	

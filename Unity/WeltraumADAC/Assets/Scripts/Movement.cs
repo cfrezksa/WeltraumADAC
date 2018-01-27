@@ -65,6 +65,7 @@ public class Movement : MonoBehaviour {
             var direction = pathToGo.normalized;
             transform.position += stepLength * direction;
 
+            direction.y = 0.0f;
             Vector3 fwd = this.transform.forward;
             Vector3 lookDir = (fwd + turnSpeed * Time.deltaTime * direction).normalized;
             this.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);

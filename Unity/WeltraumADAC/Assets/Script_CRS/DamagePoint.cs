@@ -16,6 +16,8 @@ public class DamagePoint : MonoBehaviour {
 
     static List<DamagePoint> activeDamages = new List<DamagePoint>();
 
+    public GameObject damageOn;
+
 	// Use this for initialization
 	void Start () {
 
