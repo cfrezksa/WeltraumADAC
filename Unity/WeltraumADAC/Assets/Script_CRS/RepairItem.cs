@@ -6,7 +6,7 @@ public class RepairItem : MonoBehaviour {
 
     public DamageType damageType;
     public float velocity = 2f;
-    public float maxHeight = 10f;
+    public float maxHeight = 30f;
     public float rotationSpeed = 0.3f;
     private bool shouldFloat = false;
 

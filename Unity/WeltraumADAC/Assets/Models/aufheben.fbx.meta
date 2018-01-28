@@ -82,7 +82,7 @@ ModelImporter:
     4300006: polySurface47
     4300008: kopf
     4300010: polySurface49
-    7400000: Take 001
+    7400000: aufheben
     7400002: Idle
     9500000: //RootNode
     13700000: kopf
@@ -119,7 +119,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: aufheben
       takeName: Take 001
       firstFrame: 1
       lastFrame: 32

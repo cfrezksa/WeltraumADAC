@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RobotControl : MonoBehaviour {
 
+    public GameObject confusedSystem;
     const float EPSILON = 0.5f;
     Waypoint goal = null;
     Vector3 targetPos;
@@ -12,20 +13,84 @@ public class RobotControl : MonoBehaviour {
     float workingTime = 0.0f;
     float totalWorkingTime = 1.0f;
     const float totalRepairTime = 5.0f;
+    const float totalContainerTime = 3.0f;
     const float totalDamagingTime = 10.0f;
+
+    enum Speech
+    {
+        DAMAGE_DETECTED = 0,
+        BERYLLIUMKUGEL,
+        FLUX_COMPENSATOR,
+        WERKZEUG,
+        BATTERIE,
+        BERYLLIUMKUGEL_ERHALTEN,
+        FLUX_COMPENSATOR_ERHALTEN,
+        WERKZEUG_ERHALTEN,
+        BATTERIE_ERHALTEN,
+        BERYLLIUMKUGEL_INSTALLIERT,
+        FLUX_COMPENSATOR_INSTALLIERT,
+        WERKZEUG_INSTALLIERT,
+        BATTERIE_INSTALLIERT,
+        SCHWEISSGERAET,
+        KAPUTT_GEMACHT,
+        I_AM_CONFUSED,
+        BEFEHL_ERHALTEN,
+        BEREIT_FUER_BEFEHLE,
+        OUCH
+    }
+    public AudioClip[] speech;
 
     enum RobotState
     {
-        MOVE_TO_GOAL,
+        IDLE,
+        MOVE_TO_CONTAINER,
+        WAITING_FOR_CONTAINER,
+        MOVE_TO_DAMAGE,
         MOVE_TO_DESTROY,
         MAKING_DAMAGE,
         MAKING_REPAIR,
     }
 
-    RobotState state = RobotState.MOVE_TO_GOAL;
+
+    enum AnimState
+    {
+        IDLE,
+        STUNNED,
+        MOVE,
+        PICKUP,
+        THROW,
+        WELD,
+        SCREW,
+    }
+
+    RobotState state = RobotState.IDLE;
+    Animator animator;
+
+    void PlaySound(Speech s)
+    {
+        int soundIndex = (int)s;
+        if (soundIndex >= speech.Length)
+        {
+            Debug.Log("Missing sound: " + s);
+            return;
+        }
+        AudioClip clip = speech[soundIndex];
+        var audiosource = GetComponent<AudioSource>();
+        audiosource.PlayOneShot(clip);
+    }
+
     public void SetTarget(Waypoint targetWP, bool isConfused = false) {
 
-        state = (isConfused) ? RobotState.MOVE_TO_DESTROY : RobotState.MOVE_TO_GOAL;
+        PlaySound( (isConfused)?  Speech.I_AM_CONFUSED : Speech.BEFEHL_ERHALTEN);
+
+        if (null != confusedSystem)
+        {
+            confusedSystem.SetActive(isConfused);
+        }
+        
+        bool isTargetDamage = (targetWP.GetComponent<DamagePoint>() != null);
+
+        state = (isConfused) ? RobotState.MOVE_TO_DESTROY : (isTargetDamage) ? RobotState.MOVE_TO_DAMAGE : RobotState.MOVE_TO_CONTAINER;
 
         goal = targetWP;
 
@@ -33,6 +98,16 @@ public class RobotControl : MonoBehaviour {
         if (null != move)
         {
             move.setTargetWaypoint(targetWP);
+        }
+
+        SetAnimState(AnimState.MOVE);
+    }
+
+    void Start()
+    {
+        if (null != confusedSystem)
+        {
+            confusedSystem.SetActive(false);
         }
     }
 
@@ -44,10 +119,12 @@ public class RobotControl : MonoBehaviour {
             switch (state) {
                 case RobotState.MAKING_DAMAGE:
                 case RobotState.MAKING_REPAIR:
+                case RobotState.WAITING_FOR_CONTAINER:
                     DoWork();
                     break;
                 case RobotState.MOVE_TO_DESTROY:
-                case RobotState.MOVE_TO_GOAL: 
+                case RobotState.MOVE_TO_DAMAGE:
+                case RobotState.MOVE_TO_CONTAINER: 
                   MoveToTarget();
                   break;
             }
@@ -55,10 +132,47 @@ public class RobotControl : MonoBehaviour {
         }
     }
 
+    AnimState animState = AnimState.IDLE;
+    void SetAnimState(AnimState newState)
+    {
+        if (animState == newState) return;
 
+        Animator anim = GetComponentInChildren<Animator>();
+        if (null == anim) Debug.LogError("Missing Animator");
 
+        switch (newState)
+        {
+            case AnimState.IDLE:
+                anim.SetTrigger("idle");
+                break;
+            case AnimState.MOVE:
+                anim.SetTrigger("move");
+                break;
+            case AnimState.STUNNED:
+                anim.SetTrigger("stunned");
+                break;
+            case AnimState.PICKUP:
+                anim.SetTrigger("pickup");
+                break;
+            case AnimState.THROW:
+                anim.SetTrigger("throw");
+                break;
+            case AnimState.WELD:
+                anim.SetTrigger("weld");
+                break;
+            case AnimState.SCREW:
+                anim.SetTrigger("screw");
+                break;
+        }
+
+        animState = newState;
+    }
     private void DoWork()
     {
+        // hier unterschiede machen
+        SetAnimState(AnimState.WELD);
+
+
         workingTime += Time.deltaTime;
         if (workingTime > totalWorkingTime)
         {
@@ -67,14 +181,16 @@ public class RobotControl : MonoBehaviour {
     }
    public void HighlightRobot()
     {
-        Colorize(Color.green);
+        PlaySound(Speech.BEREIT_FUER_BEFEHLE);
+        //Colorize(Color.green);
     }
 
     public void UnhighlightRobot()
     {
-        Colorize(Color.white);
+        //Colorize(Color.white);
     }
 
+    /*
     private void Colorize(Color col)
     {
         var renderers = this.GetComponentsInChildren<Renderer>();
@@ -83,7 +199,7 @@ public class RobotControl : MonoBehaviour {
             r.material.color = col;
         }
     }
-
+    */
     private void MoveToTarget()
     {
         float dist = (this.transform.position - goal.transform.position).magnitude;
@@ -94,12 +210,20 @@ public class RobotControl : MonoBehaviour {
             switch (state)
             {
                 case RobotState.MOVE_TO_DESTROY:
+                    SetAnimState(AnimState.WELD);
                     totalWorkingTime = totalDamagingTime;
                     state = RobotState.MAKING_DAMAGE;
                     break;
-                case RobotState.MOVE_TO_GOAL:
+                case RobotState.MOVE_TO_DAMAGE:
                     totalWorkingTime = totalRepairTime;
                     state = RobotState.MAKING_REPAIR;
+                    SetAnimState(AnimState.SCREW);
+                    break;
+                case RobotState.MOVE_TO_CONTAINER:
+                    StartContainerAction();
+                    totalWorkingTime = totalContainerTime;
+                    state = RobotState.WAITING_FOR_CONTAINER;
+                    SetAnimState(AnimState.PICKUP);
                     break;
 
             }
@@ -116,37 +240,26 @@ public class RobotControl : MonoBehaviour {
                 FinishDamageAction();
                 break;
             case RobotState.MAKING_REPAIR:
-                FinishRegularAction();
-                break;
-        }
-
-    }
-
-    private void FinishRegularAction()
-    {
-        //Debug.Log("Regular Action");
-        switch (goal.goalType)
-        {
-            case Waypoint.GoalType.CONTAINER:
-                FinishContainerAction();
-                break;
-            case Waypoint.GoalType.DAMAGE:
                 FinishRepairAction();
                 break;
-            default:
+            case RobotState.WAITING_FOR_CONTAINER:
+                FinishContainerAction();
                 break;
         }
-    }
 
+    }
+    
     private void FinishDamageAction()
     {
+        PlaySound(Speech.KAPUTT_GEMACHT);
+
         //Debug.Log("Robot " + name + " executing damage action!");
         DamagePoint dp = goal.GetComponent<DamagePoint>();
         if (null == dp) Debug.LogError("not a ContainerPoint object!");
-
         dp.Activate();
 
         BeConfused();
+        SetAnimState(AnimState.STUNNED);
     }
 
 
@@ -203,18 +316,41 @@ public class RobotControl : MonoBehaviour {
             carriedItem = null;
         }
 
+        Waypoint wp = dp.GetComponent<Waypoint>();
+        switch (wp.damage)
+        {
+            case DamageType.REPAIR_WELD:
+                PlaySound(Speech.SCHWEISSGERAET);
+                break;
+            case DamageType.REPAIR_MECHANIC:
+                PlaySound(Speech.WERKZEUG_INSTALLIERT);
+                break;
+            case DamageType.REPAIR_BATTERY:
+                PlaySound(Speech.BATTERIE_INSTALLIERT);
+                break;
+            case DamageType.REPAIR_BERYLLIUM:
+                PlaySound(Speech.BERYLLIUMKUGEL_INSTALLIERT);
+                break;
+            case DamageType.REPAIR_FLUX:
+                PlaySound(Speech.FLUX_COMPENSATOR_INSTALLIERT);
+                break;
+            default:
+            case DamageType.REPAIR_NONE:
+                break;
+        }
+        
         dp.Deactivate();
-        state = RobotState.MOVE_TO_GOAL;
+        state = RobotState.IDLE;
         goal = null;
     }
-
+   
     void BeConfused()
     {
-        Colorize(Color.red);
-        //Debug.Log("Robot " + name + " is now confused!");
+        //PlaySound(Speech.I_AM_CONFUSED);
 
         if (carriedItem != null)
         {
+            SetAnimState(AnimState.THROW);
             carriedItem.FloatToSpace();
             carriedItem = null;
         }
@@ -261,10 +397,10 @@ public class RobotControl : MonoBehaviour {
         return unusedPoints;
     }
 
-    private void FinishContainerAction()
-    {
-        Debug.Log("Robot " + name + " executing container action!");
+    private void StartContainerAction() {
+
         ContainerPoint cp = goal.GetComponent<ContainerPoint>();
+        cp.Open();
         if (null == cp) Debug.LogError("not a ContainerPoint object!");
 
         if (cp.prefab == null) return;
@@ -275,11 +411,68 @@ public class RobotControl : MonoBehaviour {
             carriedItem = null;
         }
 
+        Waypoint wp = goal.GetComponent<Waypoint>();
+        switch (wp.damage)
+        {
+            case DamageType.REPAIR_MECHANIC:
+                PlaySound(Speech.WERKZEUG);
+                break;
+            case DamageType.REPAIR_BATTERY:
+                PlaySound(Speech.BATTERIE);
+                break;
+            case DamageType.REPAIR_BERYLLIUM:
+                PlaySound(Speech.BERYLLIUMKUGEL);
+                break;
+            case DamageType.REPAIR_FLUX:
+                PlaySound(Speech.FLUX_COMPENSATOR);
+                break;
+            default:
+            case DamageType.REPAIR_WELD:
+            case DamageType.REPAIR_NONE:
+                break;
+        }
+    }
+
+    private void FinishContainerAction()
+    {
+        ContainerPoint cp = goal.GetComponent<ContainerPoint>();
+        cp.Close();
+        if (null == cp) Debug.LogError("not a ContainerPoint object!");
+
+        if (cp.prefab == null) return;
+
+        if (carriedItem != null)
+        {
+            DestroyImmediate(carriedItem.gameObject);
+            carriedItem = null;
+        }
+
+        Waypoint wp = goal.GetComponent<Waypoint>();
+        switch (wp.damage)
+        {
+            case DamageType.REPAIR_MECHANIC:
+                PlaySound(Speech.WERKZEUG_ERHALTEN);
+                break;
+            case DamageType.REPAIR_BATTERY:
+                PlaySound(Speech.BATTERIE_ERHALTEN);
+                break;
+            case DamageType.REPAIR_BERYLLIUM:
+                PlaySound(Speech.BERYLLIUMKUGEL_ERHALTEN);
+                break;
+            case DamageType.REPAIR_FLUX:
+                PlaySound(Speech.FLUX_COMPENSATOR_ERHALTEN);
+                break;
+            default:
+            case DamageType.REPAIR_WELD:
+            case DamageType.REPAIR_NONE:
+                break;
+        }
+
 
         GameObject item = Instantiate(cp.prefab, this.transform);
         carriedItem = item.GetComponent<RepairItem>();
         
-        state = RobotState.MOVE_TO_GOAL;
+        state = RobotState.MOVE_TO_DAMAGE;
         goal = null;
     }
 }

@@ -18,7 +18,11 @@ public class PlayerMove : MonoBehaviour {
         this.transform.position = newPos;
 
         UpdateRobots();
-		
+
+        Vector3 lookDir = newPos - this.transform.position;
+        lookDir.Normalize();
+
+        this.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
 	}
 
     private Vector3 MoveByInput()
@@ -30,9 +34,9 @@ public class PlayerMove : MonoBehaviour {
 
         Vector3 newPos = transform.position + velocity * move;
         if (newPos.x < -10.0) newPos.x = -10.0f;
-        if (newPos.x > 10.0) newPos.x = 10.0f;
-        if (newPos.z < -10.0) newPos.z = -10.0f;
-        if (newPos.z > 10.0) newPos.z = 10.0f;
+        if (newPos.x > 6.0) newPos.x = 6.0f;
+        if (newPos.z < -13.0) newPos.z = -13.0f;
+        if (newPos.z > 12.0) newPos.z = 12.0f;
         return newPos;
     }
 

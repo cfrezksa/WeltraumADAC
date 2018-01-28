@@ -61,7 +61,7 @@
 				fixed4 col = tex2D(_MainTex, i.uv);
 				float range = col.r;
 				float wave = max(0.0,sin(_Frequency*range -_Speed*_Time));
-				col.rgb = _TintColor.rgb;
+				col.rgb = _TintColor.rgb * wave;
 				col.a *= wave * _Transparency;
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);

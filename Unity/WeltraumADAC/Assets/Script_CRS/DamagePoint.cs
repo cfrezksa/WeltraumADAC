@@ -18,8 +18,9 @@ public class DamagePoint : MonoBehaviour {
 
     public GameObject damageOn;
     public GameObject damageParticles;
+    public GameObject bubbleIcon;
     GameObject particleSystem = null;
-
+    public Material[] bubbleMaterials;
 
 	// Use this for initialization
 	void Start () {
@@ -60,28 +61,41 @@ public class DamagePoint : MonoBehaviour {
             damageOn.gameObject.SetActive(true);
         }
 
+
         if (damageParticles != null)
         {
-            Debug.Log("Instantiate Particle System");
             particleSystem = Instantiate(damageParticles, this.transform);
         }
-        //Debug.Log("DamagePoint " + name + " is activated!");
 
         DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
         SetDamage(dmg);
-
-        //Debug.Log("Activate DamagePoint: " + name);
-        int numActive = activeDamages.Count;
-        int sym = numActive % 4;
-        int damageSet = numActive / 4;
-
+        if (bubbleIcon != null)
+        {
+            bubbleIcon.gameObject.SetActive(dmg != DamageType.REPAIR_NONE);
+            Material mat = bubbleMaterials[(int)dmg];
+            Renderer r = bubbleIcon.GetComponent<Renderer>();
+            r.material = mat;
+        }
         activeDamages.Add(this);
+        AssignIcons();
 
-        Selectable selectable = GetComponent<Selectable>();
-        selectable.symbol = (Symbol) sym;
-        selectable.group = (SelectGroup) (SelectGroup.DAMAGE_1 + damageSet);
     }
 
+
+    static void AssignIcons()
+    {
+        int index = 0;
+        foreach (var d in activeDamages)
+        {
+            int sym = index % 4;
+            int damageSet = index / 4;
+
+            Selectable selectable = d.GetComponent<Selectable>();
+            selectable.symbol = (Symbol)sym;
+            selectable.group = (SelectGroup)(SelectGroup.DAMAGE_1 + damageSet);
+            index++;
+        }
+    }
     public void Deactivate()
     {
         if (damageOn != null)
@@ -89,11 +103,15 @@ public class DamagePoint : MonoBehaviour {
             damageOn.gameObject.SetActive(false);
         }
 
+        if (bubbleIcon != null)
+        {
+            bubbleIcon.gameObject.SetActive(false);
+        }
+
         if (particleSystem != null)
         {
             particleSystem.SetActive(false);
         }
-        //Debug.Log("Deactivate DamagePoint: " + name);
         activeDamages.Remove(this);
 
         Selectable selectable = GetComponent<Selectable>();
