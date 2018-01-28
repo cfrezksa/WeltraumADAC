@@ -17,6 +17,9 @@ public class DamagePoint : MonoBehaviour {
     static List<DamagePoint> activeDamages = new List<DamagePoint>();
 
     public GameObject damageOn;
+    public GameObject damageParticles;
+    GameObject particleSystem = null;
+
 
 	// Use this for initialization
 	void Start () {
@@ -56,6 +59,12 @@ public class DamagePoint : MonoBehaviour {
         {
             damageOn.gameObject.SetActive(true);
         }
+
+        if (damageParticles != null)
+        {
+            Debug.Log("Instantiate Particle System");
+            particleSystem = Instantiate(damageParticles, this.transform);
+        }
         //Debug.Log("DamagePoint " + name + " is activated!");
 
         DamageType dmg = DamageType.REPAIR_NONE + Random.Range(1, 6);
@@ -78,6 +87,11 @@ public class DamagePoint : MonoBehaviour {
         if (damageOn != null)
         {
             damageOn.gameObject.SetActive(false);
+        }
+
+        if (particleSystem != null)
+        {
+            particleSystem.SetActive(false);
         }
         //Debug.Log("Deactivate DamagePoint: " + name);
         activeDamages.Remove(this);
