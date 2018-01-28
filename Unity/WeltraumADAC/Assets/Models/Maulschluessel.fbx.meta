@@ -3,7 +3,7 @@ guid: 4c204820cf2d9b447a9e41794adf0ca0
 timeCreated: 1517088548
 licenseType: Free
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: Cylinder.008
     100002: Cylinder.010
@@ -14,15 +14,16 @@ ModelImporter:
     2100000: No Name
     2300000: Cylinder.008
     2300002: Cylinder.010
+    2300004: //RootNode
     3300000: Cylinder.008
     3300002: Cylinder.010
+    3300004: //RootNode
     4300000: Cylinder.008
-  externalObjects: {}
+    4300002: Cylinder.010
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -35,7 +36,6 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -60,8 +60,6 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
-    preserveHierarchy: 0
-    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
